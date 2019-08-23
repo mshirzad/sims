@@ -11,6 +11,9 @@ class Grade(models.Model):
     name = models.CharField(max_length=100) # class 11 A
     grade = models.IntegerField()
 
+    def __str__(self):
+        return self.name
+
 class Class(models.Model):
 
     uid =  models.UUIDField(primary_key=True, default=uuid.uuid4)
