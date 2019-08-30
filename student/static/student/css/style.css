@@ -19,3 +19,39 @@
         line-height: 32px;
         padding-left: 3px;
     }
+
+
+/* client edit view form */
+
+.k-edit-form-container {
+    width: 100%;
+}
+.student_edit_view_form_ctn {
+    width: 70%;
+    border: 1px solid blue;
+    margin: auto;
+}
+
+#student_edit_view_form {
+    display: flex;
+    justify-content: space-around;
+}
+
+label {
+    display: inline-block;
+    width: 150px;
+    text-align: right;
+    margin-right: 5px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.student-image {
+    display: flex;
+    justify-content: space-around;
+}
+
+
+.student-image img {
+    width: 150px; 
+}

@@ -1,4 +1,39 @@
 $(document).ready(function() {
+
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
+
+    
+
     $('#menu').kendoMenu({
         dataSource: [
             {
@@ -40,32 +75,34 @@ $(document).ready(function() {
                 },
                 update:{
                     url: '/students/',
-                    dataType: 'json',
-                    contentType: 'application/json',
-                    type: 'put',
-                    data: {
-                        csrf_token: 'token',
-                    }
+                    dataType: 'jsonp',
+                    // contentType: 'application/json',
+                    type: 'post',
+                    // data: {
+                    //     csrf_token: 'token',
+                    // }
                 },
                 destroy: {
                     url: '/students/',
-                    dataType: "jsonp",
+                    dataType: "json",
                     type: 'delete',
                 },
                 create: {
                     url: '/students/',
-                    dataType: "jsonp",
+                    dataType: "json",
                     type: 'post'
                 },
-                parameterMap: function (data, type){
+                parameterMap: function (data, operation){
+                    
                     console.log(data);
-                    console.log(type);
+                    console.log(operation);
 
-                    return {models: kendo.stringify(data.models)};
+                    return kendo.stringify([{model: 'student.student', fields:data}]);
                 }
             },
             schema: {
                 model: {
+                    id: 'uid',
                     fields:{
                         uid: {
                             type: 'string'
@@ -85,7 +122,7 @@ $(document).ready(function() {
                         gender: {
                             type: 'string'
                         },
-                        // image: {type: 'string'},
+                        image: {type: 'string'},
                         grade_id: {
                             type: 'string'
                         },
@@ -96,7 +133,7 @@ $(document).ready(function() {
                 },
                 parse: function (response) {
                     // ECMA Script 6 block scoped variable                    
-                    let s= [];
+                    let s = [];
 
                     for (let i = 0; i < response.length; i++){
 
@@ -107,7 +144,7 @@ $(document).ready(function() {
 
                     }
 
-                    console.log(s);
+                    // console.log(s);
                     return s;
                     
                 }
@@ -116,7 +153,16 @@ $(document).ready(function() {
         height: 550,
         groupable: true,
         sortable: true,
-        editable: 'popup',
+        editable: {
+            mode: 'popup',
+            template: kendo.template($('#student-view').html()),
+            window: {
+                actions: ['Maximize', 'close', 'Minimize'],
+                width: '70%'
+            }
+            
+        },
+        toolbar: ['create'],
         columns: [
         {
             field: 'uid',
@@ -147,8 +193,14 @@ $(document).ready(function() {
             title: 'Action',
             width: 300
         }
-    ]
+    ],
+    edit: function(){
+        $('#datepicker').kendoDatePicker();
+        $('#gender-select').kendoDropDownList();
+        $('#image-input').kendoUpload();
+    }
     });
 
+    
 
 });

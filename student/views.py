@@ -14,8 +14,17 @@ def home(request):
 
 def student_list(request):
 
-    students = Student.objects.all()
+    if request.method == 'GET':
+        students = Student.objects.all()
 
-    data = serializers.serialize('json', students)
+        data = serializers.serialize('json', students)
 
-    return HttpResponse(data)
+        return HttpResponse(data)
+    elif request.method == 'POST':
+
+        print(request.body )
+        data = serializers.deserialize('json', request.body)
+
+        print(data)
+        for rec in data:
+            rec.save()
