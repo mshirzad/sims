@@ -195,9 +195,106 @@ $(document).ready(function() {
         }
     ],
     edit: function(){
+
+        let originalURL = $('#image-preview').attr('src');
+
+        function onFileInputSelect(e){
+
+            console.log('onchange fired on image-input');
+
+            let reader = new FileReader();
+            // inputElement = e.target;
+
+            reader.onload = function(e){
+
+                $('#image-preview').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(e.files[0].rawFile);
+
+
+        };
+
+        function onFileInputRemove(e){
+
+            console.log('remove fired on image-input');
+            console.log(e.files.length);
+            if (e.files.length === 1){
+                $('#image-preview').attr('src', originalURL);
+                return;
+            }
+                
+                
+
+            let reader = new FileReader();
+            // inputElement = e.target;
+
+            reader.onload = function(e){
+
+                $('#image-preview').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(e.files[e.files.length - 1].rawFile);
+
+
+        };
+
         $('#datepicker').kendoDatePicker();
         $('#gender-select').kendoDropDownList();
-        $('#image-input').kendoUpload();
+        $('#image-input').kendoUpload({
+            remove: onFileInputRemove,
+            select: onFileInputSelect
+        });
+        $('#grade-select').kendoDropDownList({
+            dataTextField: 'name',
+            dataValueField: 'uid',
+            dataSource: {
+                transport: {
+                    read: {
+                        dataType: 'json',
+                        url: '/grades/'
+                    }
+                },
+                schema: {
+                    parse: function (response){
+
+                        let grades = [];
+
+                        for (let i = 0; i < response.length; i++)
+                            grades.push({
+                                uid: response[i].pk,
+                                name: response[i].fields.name
+                            });
+
+                        return grades;
+                    }
+                }
+            }
+        });
+
+        
+
+    },
+    save: function (e) {  
+
+
+        console.log(e.model.isNew());
+
+        let form = $('#student_edit_view_form')[0];
+
+        let data = new FormData(form);
+
+        data.append('uid', e.model.id);
+
+        $.ajax({
+            type: 'POST',
+            url: '/students/',
+            data: data,
+            processData: false,
+            contentType: false,
+        });
+
+        e.preventDefault();
     }
     });
 

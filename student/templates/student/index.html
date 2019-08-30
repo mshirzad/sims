@@ -33,7 +33,7 @@
                 <div class="student_edit_view_form_ctn">
                     <div class="student-image">
                         <div>
-                            <img src="/media/#:image#"> 
+                            <img id="image-preview" src="/media/#:image#"> 
                         </div>
                         <div>
                         </div>
@@ -41,20 +41,26 @@
 
                     <form id="student_edit_view_form">
                         <div class="row">
-                            <div> <label for='national_id'> Change Image : </label><input id="image-input" class="k-textbox" type="file"> </div>
-                            <div> <label for='national_id'> National ID : </label><input class="k-textbox" type="text" data-bind="value: national_id"> </div>
-                            <div> <label for='national_id'> First Name : </label><input class="k-textbox" type="text" data-bind="value: first_name"> </div>
-                            <div> <label for='national_id'> Last Name : </label><input class="k-textbox" type="text" data-bind="value: last_name"> </div>
-                            <div> <label for='national_id'> Father's Name : </label><input class="k-textbox" type="text" data-bind="value: fathers_name"> </div>
+                            <div> <label for='national_id'> Change Image : </label><input name="file" id="image-input" class="k-textbox" type="file"> </div>
+                            <div> <label for='national_id'> National ID : </label><input name="national_id" class="k-textbox" type="text" data-bind="value: national_id"> </div>
+                            <div> <label for='national_id'> First Name : </label><input name="first_name" class="k-textbox" type="text" data-bind="value: first_name"> </div>
+                            <div> <label for='national_id'> Last Name : </label><input name="last_name" class="k-textbox" type="text" data-bind="value: last_name"> </div>
+                            <div> <label for='national_id'> Father's Name : </label><input name="fathers_name" class="k-textbox" type="text" data-bind="value: fathers_name"> </div>
                         </div>
 
                         <div class="row">
-                            <div> <label for='national_id'> DOB : </label> <input id="datepicker" class="k-textbox" data-bind="value: dob"> </div>
+                            <div> <label for='national_id'> DOB : </label> <input name="dob" id="datepicker" class="k-textbox" data-bind="value: dob"> </div>
                             <div> 
                                 <label for='national_id'> Gender : </label>
-                                <select id="gender-select" data-bind="value: gender">
+                                <select name="gender" id="gender-select" data-bind="value: gender">
                                     <option value="m"> Male </option>
                                     <option value="f"> Female </option>
+                                </select>
+                            </div>
+                            <div> 
+                                <label for='grad_select'> Grade : </label>
+                                <select name="grade" id="grade-select" data-bind="value: grade">
+
                                 </select>
                             </div>
                         </div>

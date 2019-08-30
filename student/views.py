@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Student
+from .models import Student, Grade
 from teacher.models import Teacher
 import json
 from django.core import serializers
@@ -28,3 +28,13 @@ def student_list(request):
         print(data)
         for rec in data:
             rec.save()
+
+
+def grade_list(request):
+
+    grades = Grade.objects.all()
+
+    data = serializers.serialize('json', grades)
+
+    return HttpResponse(data)
+
